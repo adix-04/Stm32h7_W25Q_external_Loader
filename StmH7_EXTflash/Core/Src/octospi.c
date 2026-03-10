@@ -641,7 +641,7 @@ uint8_t CSP_QSPI_EnableMemoryMappedMode(void)
     sCommand.Address 				= 0;                            /* Byte Address */
     /* Data */
     sCommand.DataMode 				= HAL_OSPI_DATA_4_LINES; /* Define Data Lines: Data On Four Lines */
-    sCommand.DummyCycles 			= 0;                  /* Bytes Send With No Data */
+    sCommand.DummyCycles 			= 4;                  /* Bytes Send With No Data */
     sCommand.NbData 				= 0;
     if (HAL_OSPI_Command(&hqspi, &sCommand, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
     {
