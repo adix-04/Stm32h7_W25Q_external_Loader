@@ -1,0 +1,15 @@
+../Core/Src/octospi.c:31:6:MX_OCTOSPI1_Init	32	static
+../Core/Src/octospi.c:75:6:HAL_OSPI_MspInit	256	static
+../Core/Src/octospi.c:152:6:HAL_OSPI_MspDeInit	16	static
+../Core/Src/octospi.c:197:9:CSP_QUADSPI_Init	8	static
+../Core/Src/octospi.c:241:1:CSP_QSPI_Erase_Chip	88	static
+../Core/Src/octospi.c:287:16:QSPI_AutoPollingMemReady	120	static
+../Core/Src/octospi.c:337:16:QSPI_WriteEnable	112	static
+../Core/Src/octospi.c:419:1:QSPI_Configuration	96	static
+../Core/Src/octospi.c:472:1:CSP_QSPI_EraseSector	104	static
+../Core/Src/octospi.c:527:1:CSP_QSPI_WriteMemory	120	static
+../Core/Src/octospi.c:615:9:CSP_QSPI_EnableMemoryMappedMode	96	static
+../Core/Src/octospi.c:688:16:QSPI_ResetChip	88	static
+../Core/Src/octospi.c:753:9:CSP_QSPI_ReadMemory	104	static
+../Core/Src/octospi.c:796:19:W25Q128_Read_Status_Registers	104	static
+../Core/Src/octospi.c:848:19:W25Q128_Write_Status_Registers	96	static
