@@ -45,7 +45,9 @@
 
 /* USER CODE BEGIN PV */
 uint8_t writebuf[] = "Hello world from QSPI";
-uint8_t Readbuf[100];
+uint8_t Readbuf[100] = {0};
+
+const uint8_t __attribute__((section(".extFlash"))) buf [] = "hello world from mappped qspi function";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,11 +98,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   if (CSP_QUADSPI_Init() != HAL_OK) Error_Handler();
 
- // if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
+   if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
 
   //if (CSP_QSPI_ReadMemory(Readbuf, 0, 100) != HAL_OK) Error_Handler();
 
-  if (CSP_QSPI_WriteMemory(writebuf, 0, sizeof(writebuf)) != HAL_OK) Error_Handler();
+  //if (CSP_QSPI_WriteMemory(writebuf, 0, sizeof(writebuf)) != HAL_OK) Error_Handler();
 
 
   if(CSP_QSPI_EnableMemoryMappedMode() != HAL_OK) Error_Handler();
