@@ -20,11 +20,10 @@
 #include "main.h"
 #include "octospi.h"
 #include "gpio.h"
-#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,7 +72,7 @@ int main(void)
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
-  MPU_Config();
+  //MPU_Config();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -97,7 +96,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   if (CSP_QUADSPI_Init() != HAL_OK) Error_Handler();
 
-  if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
+ // if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
 
   //if (CSP_QSPI_ReadMemory(Readbuf, 0, 100) != HAL_OK) Error_Handler();
 
@@ -116,13 +115,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_1);
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
+	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
     /* USER CODE END WHILE */
-     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
-     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_1);
-     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
 
-
-     HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -205,9 +204,9 @@ void MPU_Config(void)
 
   /** Initializes and configures the Region and the memory to be protected
   */
-  MPU_InitStruct.Enable = MPU_REGION_DISABLE;
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
   MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-  MPU_InitStruct.BaseAddress = 0x90000000;
+  MPU_InitStruct.BaseAddress = 0x0;
   MPU_InitStruct.Size = MPU_REGION_SIZE_4GB;
   MPU_InitStruct.SubRegionDisable = 0x87;
   MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
