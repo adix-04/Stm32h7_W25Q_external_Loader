@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <string.h>
+#include <Loader_Src.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,10 +45,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t writebuf[] = "Hello world from QSPI";
-uint8_t Readbuf[100] = {0};
-
-const uint8_t __attribute__((section(".extFlash"))) buf [] = "hello world from mappped qspi function";
+//const uint8_t __attribute__((section(".extFlash"))) writebuf[] = "Hello world from QSPI";
+//const uint8_t __attribute__((section(".extFlash"))) Readbuf[100] = {0};
+//
+//const uint8_t __attribute__((section(".extFlash"))) buf [] = "hello world from mappped qspi function";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,38 +95,40 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //MX_OCTOSPI1_Init();
-  /* USER CODE BEGIN 2 */
-  if (CSP_QUADSPI_Init() != HAL_OK) Error_Handler();
+  MX_OCTOSPI1_Init();
 
-   if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
+  //Init();
+  /* USER CODE BEGIN 2 */
+ // if (CSP_QUADSPI_Init() != HAL_OK) Error_Handler();
+
+   //if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
 
   //if (CSP_QSPI_ReadMemory(Readbuf, 0, 100) != HAL_OK) Error_Handler();
 
   //if (CSP_QSPI_WriteMemory(writebuf, 0, sizeof(writebuf)) != HAL_OK) Error_Handler();
 
 
-  if(CSP_QSPI_EnableMemoryMappedMode() != HAL_OK) Error_Handler();
+  //if(CSP_QSPI_EnableMemoryMappedMode() != HAL_OK) Error_Handler();
 
   //SCB_EnableDCache();
 
   //if (CSP_QSPI_ReadMemory(Readbuf, 0, 100) != HAL_OK) Error_Handler();
-  memcpy(Readbuf, (void*)0x90000000, sizeof(writebuf));
+ // memcpy(Readbuf, (void*)0x90000000, sizeof(writebuf));
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
-	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_1);
-	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
-
-
-
-	  HAL_Delay(1000);
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_1);
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+//	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
+//	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
+//
+//
+//
+//	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

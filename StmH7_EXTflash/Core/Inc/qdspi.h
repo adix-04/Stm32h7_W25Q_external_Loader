@@ -17,6 +17,9 @@ uint8_t CSP_QSPI_WriteMemory(uint8_t* buffer, uint32_t address, uint32_t buffer_
 uint8_t CSP_QSPI_EnableMemoryMappedMode(void);
 uint8_t CSP_QSPI_Erase_Chip (void);
 uint8_t CSP_QSPI_ReadMemory(uint8_t* pData, uint32_t ReadAddr, uint32_t Size);
+HAL_StatusTypeDef W25Q128_Read_Status_Registers(OSPI_HandleTypeDef* hospi, uint8_t* register_data, uint8_t register_num);
+HAL_StatusTypeDef W25Q128_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint8_t reg_data, uint8_t reg_num);
+
 
 /* USER CODE END Private defines */
 
@@ -59,6 +62,9 @@ uint8_t CSP_QSPI_ReadMemory(uint8_t* pData, uint32_t ReadAddr, uint32_t Size);
 /*MT25QL128A timeouts*/
 #define QUADSPI_MAX_ERASE_TIMEOUT 460000 /* 460s max */
 
+
+#define W25Q_SR_Quad_Enable							((uint8_t)0x02)    /*!< Quad Enable */
+#define W25Q_SR_DRV1                     			((uint8_t)0x9f)
 /* USER CODE END Prototypes */
 
 #endif /* INC_QDSPI_H_ */

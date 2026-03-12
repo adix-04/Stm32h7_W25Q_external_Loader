@@ -45,7 +45,7 @@ void MX_OCTOSPI1_Init(void)
   hqspi.Init.DualQuad = HAL_OSPI_DUALQUAD_DISABLE;
   hqspi.Init.MemoryType = HAL_OSPI_MEMTYPE_MICRON;
   hqspi.Init.DeviceSize = 20;
-  hqspi.Init.ChipSelectHighTime = 1;
+  hqspi.Init.ChipSelectHighTime = 8;
   hqspi.Init.FreeRunningClock = HAL_OSPI_FREERUNCLK_DISABLE;
   hqspi.Init.ClockMode = HAL_OSPI_CLOCK_MODE_0;
   hqspi.Init.WrapSize = HAL_OSPI_WRAP_NOT_SUPPORTED;
@@ -211,7 +211,10 @@ uint8_t CSP_QUADSPI_Init(void)
     {
         return HAL_ERROR;
     }
-
+	if (QSPI_Configuration() != HAL_OK)
+	{
+		return HAL_ERROR;
+	}
     HAL_Delay(1);
 
     if (QSPI_AutoPollingMemReady(HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
@@ -222,16 +225,6 @@ uint8_t CSP_QUADSPI_Init(void)
     if (QSPI_WriteEnable() != HAL_OK)
     {
 
-        return HAL_ERROR;
-    }
-
-    if (QSPI_Configuration() != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-
-    if (QSPI_AutoPollingMemReady(HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
-    {
         return HAL_ERROR;
     }
 
@@ -420,53 +413,43 @@ static uint8_t
 QSPI_Configuration(void)
 {
 
-    OSPI_RegularCmdTypeDef sCommand;
-    uint16_t reg;
+	uint8_t reg1=0, reg2=0, reg3=0;
+	    uint8_t w_reg1=0, w_reg2=0, w_reg3=0;
 
-    sCommand.InstructionMode 		= HAL_OSPI_INSTRUCTION_1_LINE;
-    sCommand.Instruction 			= READ_CONFIGURATION_REG_CMD;
-    sCommand.AddressMode 			= HAL_OSPI_ADDRESS_NONE;
-    sCommand.AlternateBytesMode 	= HAL_OSPI_ALTERNATE_BYTES_NONE;
-    sCommand.DataMode 				= HAL_OSPI_DATA_1_LINE;
-    sCommand.DummyCycles 			= 0;
-    // sCommand.DdrMode = QSPI_DDR_MODE_DISABLE;
-    // sCommand.DdrHoldHalfCycle = QSPI_DDR_HHC_ANALOG_DELAY;
-    sCommand.SIOOMode 				= HAL_OSPI_SIOO_INST_EVERY_CMD;
-    sCommand.NbData 				= 2;
+	    if (W25Q128_Read_Status_Registers(&hqspi, &reg1, 1) != HAL_OK)
+	    {
+	        return HAL_ERROR;
+	    }
 
-    if (HAL_OSPI_Command(&hqspi, &sCommand, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
+	    if (W25Q128_Read_Status_Registers(&hqspi, &reg2, 2) != HAL_OK)
+	    {
+	        return HAL_ERROR;
+	    }
 
-    if (HAL_OSPI_Receive(&hqspi, (uint8_t *)(&reg),
-                         HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
+	    if (W25Q128_Read_Status_Registers(&hqspi, &reg3, 3) != HAL_OK)
+	    {
+	        return HAL_ERROR;
+	    }
 
-    if (QSPI_WriteEnable() != HAL_OK)
-    {
+	    w_reg1 = reg1;
+	    w_reg2 = reg2 | W25Q_SR_Quad_Enable;
+	    w_reg3 = (reg3 & W25Q_SR_DRV1);
 
-        return HAL_ERROR;
-    }
+	    if (W25Q128_Write_Status_Registers(&hqspi, w_reg1, 1) != HAL_OK)
+	    {
+	        return HAL_ERROR;
+	    }
+	    if (W25Q128_Write_Status_Registers(&hqspi, w_reg2, 2) != HAL_OK)
+	    {
+	        return HAL_ERROR;
+	    }
 
-    /*set dummy cycles*/
-    MODIFY_REG(reg, 0xF0F0, ((DUMMY_CLOCK_CYCLES_READ_QUAD << 4) | (DUMMY_CLOCK_CYCLES_READ_QUAD << 12)));
+	    if (W25Q128_Write_Status_Registers(&hqspi, w_reg3, 3) != HAL_OK)
+	    {
+	        return HAL_ERROR;
+	    }
 
-    sCommand.Instruction = QUAD_WRITE_VOL_CFG_REG_CMD;
-
-    if (HAL_OSPI_Command(&hqspi, &sCommand, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-
-    if (HAL_OSPI_Transmit(&hqspi, (uint8_t *)(&reg),
-                          HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-    return HAL_OK;
+	    return HAL_OK;
 }
 
 uint8_t
