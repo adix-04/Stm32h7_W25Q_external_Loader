@@ -20,11 +20,11 @@
 #include "main.h"
 #include "octospi.h"
 #include "gpio.h"
-#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
+#include <Loader_Src.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,8 +45,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t writebuf[] = "Hello world from QSPI";
-uint8_t Readbuf[100];
+//const uint8_t __attribute__((section(".extFlash"))) writebuf[] = "Hello world from QSPI";
+//const uint8_t __attribute__((section(".extFlash"))) Readbuf[100] = {0};
+//
+//const uint8_t __attribute__((section(".extFlash"))) buf [] = "hello world from mappped qspi function";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,7 +75,7 @@ int main(void)
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
-  MPU_Config();
+  //MPU_Config();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -93,36 +95,42 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //MX_OCTOSPI1_Init();
-  /* USER CODE BEGIN 2 */
-  if (CSP_QUADSPI_Init() != HAL_OK) Error_Handler();
+  MX_OCTOSPI1_Init();
 
-  if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
+  //Init();
+  /* USER CODE BEGIN 2 */
+ // if (CSP_QUADSPI_Init() != HAL_OK) Error_Handler();
+
+   //if(CSP_QSPI_Erase_Chip() != HAL_OK ) Error_Handler();
 
   //if (CSP_QSPI_ReadMemory(Readbuf, 0, 100) != HAL_OK) Error_Handler();
 
-  if (CSP_QSPI_WriteMemory(writebuf, 0, sizeof(writebuf)) != HAL_OK) Error_Handler();
+  //if (CSP_QSPI_WriteMemory(writebuf, 0, sizeof(writebuf)) != HAL_OK) Error_Handler();
 
 
-  if(CSP_QSPI_EnableMemoryMappedMode() != HAL_OK) Error_Handler();
+  //if(CSP_QSPI_EnableMemoryMappedMode() != HAL_OK) Error_Handler();
 
   //SCB_EnableDCache();
 
   //if (CSP_QSPI_ReadMemory(Readbuf, 0, 100) != HAL_OK) Error_Handler();
-  memcpy(Readbuf, (void*)0x90000000, sizeof(writebuf));
+ // memcpy(Readbuf, (void*)0x90000000, sizeof(writebuf));
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_1);
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+//	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
+//	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_12);
+//
+//
+//
+//	  HAL_Delay(1000);
     /* USER CODE END WHILE */
-     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_2);
-     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_1);
-     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
 
-
-     HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -205,9 +213,9 @@ void MPU_Config(void)
 
   /** Initializes and configures the Region and the memory to be protected
   */
-  MPU_InitStruct.Enable = MPU_REGION_DISABLE;
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
   MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-  MPU_InitStruct.BaseAddress = 0x90000000;
+  MPU_InitStruct.BaseAddress = 0x0;
   MPU_InitStruct.Size = MPU_REGION_SIZE_4GB;
   MPU_InitStruct.SubRegionDisable = 0x87;
   MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
