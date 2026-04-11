@@ -60,8 +60,8 @@ all: main-build
 main-build: StmH7_EXTflash.elf secondary-outputs
 
 # Tool invocations
-StmH7_EXTflash.elf StmH7_EXTflash.map: $(OBJS) $(USER_OBJS) /home/adin.n@acsiatech.com/Desktop/ST/StmH7_EXTflash/STM32H7A3VITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "StmH7_EXTflash.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/home/adin.n@acsiatech.com/Desktop/ST/StmH7_EXTflash/STM32H7A3VITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="StmH7_EXTflash.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+StmH7_EXTflash.elf StmH7_EXTflash.map: $(OBJS) $(USER_OBJS) /home/adin.n@acsiatech.com/Desktop/ST/Stm32h7_W25Q_external_Loader/StmH7_EXTflash/linker.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "StmH7_EXTflash.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/home/adin.n@acsiatech.com/Desktop/ST/Stm32h7_W25Q_external_Loader/StmH7_EXTflash/linker.ld" --specs=nosys.specs -Wl,-Map="StmH7_EXTflash.map" -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -31,8 +31,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "qdspi.h"
 /* USER CODE END Includes */
-
-extern OSPI_HandleTypeDef hospi1;
+extern OSPI_HandleTypeDef hqspi;
 
 /* USER CODE BEGIN Private defines */
 

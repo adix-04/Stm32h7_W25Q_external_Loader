@@ -31,7 +31,7 @@
 
 #define TIMEOUT 5000U
 #define KeepInCompilation
-
+#define OSPI_FLASH_BASE 0x90000000
 /* Private function prototypes -----------------------------------------------*/
 int Init ();
 KeepInCompilation int Write (uint32_t Address, uint32_t Size, uint8_t* buffer);

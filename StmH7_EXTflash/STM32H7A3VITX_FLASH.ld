@@ -50,6 +50,7 @@ MEMORY
   RAM (xrw)      : ORIGIN = 0x24000000, LENGTH = 1024K
   RAM_CD (xrw)   : ORIGIN = 0x30000000, LENGTH = 128K
   RAM_SRD (xrw)  : ORIGIN = 0x38000000, LENGTH = 32K
+  QSPI (xrw)	 : ORIGIN = 0x90000000, LENGTH = 2M
 }
 
 /* Define output sections */
@@ -62,7 +63,12 @@ SECTIONS
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
   } >FLASH
-
+  
+  .extFlash :
+  {
+  *(.extFlash)
+  } > QSPI 
+ 
   /* The program code and other data goes into FLASH */
   .text :
   {
