@@ -195,7 +195,7 @@ static uint8_t QSPI_ResetChip(void);
 /* USER CODE BEGIN 1 */
 
 /* QUADSPI init function */
-HAL_StatusTypeDef W25Q128_OCTO_SPI_Init(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OCTO_SPI_Init(OSPI_HandleTypeDef* hospi)
 {
 	if (HAL_OSPI_DeInit(hospi) != HAL_OK) {
 	    return HAL_ERROR;
@@ -203,24 +203,24 @@ HAL_StatusTypeDef W25Q128_OCTO_SPI_Init(OSPI_HandleTypeDef* hospi)
 
 	MX_OCTOSPI1_Init();
 
-	if (W25Q128_OSPI_ResetChip(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_ResetChip(hospi) != HAL_OK) {
 	    return HAL_ERROR;
 	}
-	if (W25Q128_OSPI_Configuration(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_Configuration(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
 	HAL_Delay(1);
-	if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
-    if (W25Q128_OSPI_WriteEnable(hospi) != HAL_OK) {
+    if (W25Q16_OSPI_WriteEnable(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
     return HAL_OK;
 }
 
 /* Reset Chip Function */
-HAL_StatusTypeDef W25Q128_OSPI_ResetChip(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OSPI_ResetChip(OSPI_HandleTypeDef* hospi)
 {
     OSPI_RegularCmdTypeDef sCommand={0};
 
@@ -287,22 +287,22 @@ HAL_StatusTypeDef W25Q128_OSPI_ResetChip(OSPI_HandleTypeDef* hospi)
 }
 
 /* Enable Quad Mode & Set Dummy Cycles Count */
-HAL_StatusTypeDef W25Q128_OSPI_Configuration(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OSPI_Configuration(OSPI_HandleTypeDef* hospi)
 {
     uint8_t reg1=0, reg2=0, reg3=0;
     uint8_t w_reg1=0, w_reg2=0, w_reg3=0;
 
-    if (W25Q128_Read_Status_Registers(hospi, &reg1, 1) != HAL_OK)
+    if (W25Q16_Read_Status_Registers(hospi, &reg1, 1) != HAL_OK)
     {
         return HAL_ERROR;
     }
 
-    if (W25Q128_Read_Status_Registers(hospi, &reg2, 2) != HAL_OK)
+    if (W25Q16_Read_Status_Registers(hospi, &reg2, 2) != HAL_OK)
     {
         return HAL_ERROR;
     }
 
-    if (W25Q128_Read_Status_Registers(hospi, &reg3, 3) != HAL_OK)
+    if (W25Q16_Read_Status_Registers(hospi, &reg3, 3) != HAL_OK)
     {
         return HAL_ERROR;
     }
@@ -311,16 +311,16 @@ HAL_StatusTypeDef W25Q128_OSPI_Configuration(OSPI_HandleTypeDef* hospi)
     w_reg2 = reg2 | W25Q_SR_Quad_Enable;
     w_reg3 = (reg3 & W25Q_SR_DRV1);
 
-    if (W25Q128_Write_Status_Registers(hospi, w_reg1, 1) != HAL_OK)
+    if (W25Q16_Write_Status_Registers(hospi, w_reg1, 1) != HAL_OK)
     {
         return HAL_ERROR;
     }
-    if (W25Q128_Write_Status_Registers(hospi, w_reg2, 2) != HAL_OK)
+    if (W25Q16_Write_Status_Registers(hospi, w_reg2, 2) != HAL_OK)
     {
         return HAL_ERROR;
     }
 
-    if (W25Q128_Write_Status_Registers(hospi, w_reg3, 3) != HAL_OK)
+    if (W25Q16_Write_Status_Registers(hospi, w_reg3, 3) != HAL_OK)
     {
         return HAL_ERROR;
     }
@@ -329,7 +329,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Configuration(OSPI_HandleTypeDef* hospi)
 }
 
 /* Write Enable Function */
-HAL_StatusTypeDef W25Q128_OSPI_WriteEnable(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OSPI_WriteEnable(OSPI_HandleTypeDef* hospi)
 {
     OSPI_RegularCmdTypeDef sCommand;
     OSPI_AutoPollingTypeDef sConfig;
@@ -409,7 +409,7 @@ HAL_StatusTypeDef W25Q128_OSPI_WriteEnable(OSPI_HandleTypeDef* hospi)
 }
 
 /* Auto Polling Memory Function */
-HAL_StatusTypeDef W25Q128_OSPI_AutoPollingMemReady(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OSPI_AutoPollingMemReady(OSPI_HandleTypeDef* hospi)
 {
 
     OSPI_RegularCmdTypeDef sCommand;
@@ -459,7 +459,7 @@ HAL_StatusTypeDef W25Q128_OSPI_AutoPollingMemReady(OSPI_HandleTypeDef* hospi)
 }
 
 /* Erase Chip Function */
-HAL_StatusTypeDef W25Q128_OSPI_Erase_Chip(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OSPI_Erase_Chip(OSPI_HandleTypeDef* hospi)
 {
     OSPI_RegularCmdTypeDef sCommand={0};
     //uint8_t reg3=0, w_reg3=0;
@@ -490,7 +490,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Erase_Chip(OSPI_HandleTypeDef* hospi)
 	sCommand.DummyCycles       			= 0;										/* Bytes Send With No Data */
 	sCommand.NbData            			= 1;										/* Bytes Send With Data */
 
-    if (W25Q128_OSPI_WriteEnable(hospi) != HAL_OK) {
+    if (W25Q16_OSPI_WriteEnable(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
 
@@ -498,12 +498,12 @@ HAL_StatusTypeDef W25Q128_OSPI_Erase_Chip(OSPI_HandleTypeDef* hospi)
         return HAL_ERROR;
     }
 
-    while (W25Q128_IsBusy(hospi)==HAL_ERROR)
+    while (W25Q16_IsBusy(hospi)==HAL_ERROR)
     {
     	HAL_Delay(1);
     }
 
-    if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
+    if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
 
@@ -511,7 +511,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Erase_Chip(OSPI_HandleTypeDef* hospi)
 }
 
 /* Erase Sector Function */
-HAL_StatusTypeDef W25Q128_OSPI_EraseSector(OSPI_HandleTypeDef* hospi, uint32_t EraseStartAddress, uint32_t EraseEndAddress)
+HAL_StatusTypeDef W25Q16_OSPI_EraseSector(OSPI_HandleTypeDef* hospi, uint32_t EraseStartAddress, uint32_t EraseEndAddress)
 {
     OSPI_RegularCmdTypeDef sCommand={0};
     uint32_t StartAddress=0;
@@ -546,7 +546,7 @@ HAL_StatusTypeDef W25Q128_OSPI_EraseSector(OSPI_HandleTypeDef* hospi, uint32_t E
     	sCommand.DummyCycles       			= 0;										/* Bytes Send With No Data */
     	sCommand.NbData            			= 0;										/* Bytes Send With Data */
 
-        if (W25Q128_OSPI_WriteEnable(hospi) != HAL_OK) {
+        if (W25Q16_OSPI_WriteEnable(hospi) != HAL_OK) {
             return HAL_ERROR;
         }
 
@@ -554,7 +554,7 @@ HAL_StatusTypeDef W25Q128_OSPI_EraseSector(OSPI_HandleTypeDef* hospi, uint32_t E
             return HAL_ERROR;
         }
 
-        if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
+        if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
             return HAL_ERROR;
         }
 
@@ -565,7 +565,7 @@ HAL_StatusTypeDef W25Q128_OSPI_EraseSector(OSPI_HandleTypeDef* hospi, uint32_t E
 }
 
 /* Write Function */
-HAL_StatusTypeDef W25Q128_OSPI_Write(OSPI_HandleTypeDef* hospi, uint8_t* pData, uint32_t WriteAddr, uint32_t Size)
+HAL_StatusTypeDef W25Q16_OSPI_Write(OSPI_HandleTypeDef* hospi, uint8_t* pData, uint32_t WriteAddr, uint32_t Size)
 {
   OSPI_RegularCmdTypeDef sCommand={0};
   uint32_t end_addr=0, current_size=0, current_addr=0;
@@ -623,7 +623,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Write(OSPI_HandleTypeDef* hospi, uint8_t* pData, 
     }
 
     /* Enable write operations */
-    if (W25Q128_OSPI_WriteEnable(hospi) != HAL_OK)
+    if (W25Q16_OSPI_WriteEnable(hospi) != HAL_OK)
     {
       return HAL_ERROR;
     }
@@ -641,7 +641,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Write(OSPI_HandleTypeDef* hospi, uint8_t* pData, 
     }
 
     /* Configure automatic polling mode to wait for end of program */
-    if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK)
+    if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK)
     {
       return HAL_ERROR;
     }
@@ -656,7 +656,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Write(OSPI_HandleTypeDef* hospi, uint8_t* pData, 
 }
 
 /* Read Function */
-HAL_StatusTypeDef W25Q128_OSPI_Read(OSPI_HandleTypeDef* hospi,uint8_t* pData, uint32_t ReadAddr, uint32_t Size)
+HAL_StatusTypeDef W25Q16_OSPI_Read(OSPI_HandleTypeDef* hospi,uint8_t* pData, uint32_t ReadAddr, uint32_t Size)
 {
   OSPI_RegularCmdTypeDef sCommand={0};
   /* Initialize the read command */
@@ -701,7 +701,7 @@ HAL_StatusTypeDef W25Q128_OSPI_Read(OSPI_HandleTypeDef* hospi,uint8_t* pData, ui
 }
 
 /* Memory Map Enable Function */
-HAL_StatusTypeDef W25Q128_OSPI_EnableMemoryMappedMode(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_OSPI_EnableMemoryMappedMode(OSPI_HandleTypeDef* hospi)
 {
 
     OSPI_RegularCmdTypeDef sCommand={0};
@@ -778,12 +778,12 @@ HAL_StatusTypeDef W25Q128_OSPI_EnableMemoryMappedMode(OSPI_HandleTypeDef* hospi)
 }
 
 /* Check Chip is Busy Function */
-HAL_StatusTypeDef W25Q128_IsBusy(OSPI_HandleTypeDef* hospi)
+HAL_StatusTypeDef W25Q16_IsBusy(OSPI_HandleTypeDef* hospi)
 {
 	HAL_StatusTypeDef state;
 	uint8_t status_rgister = {0};
 
-	state = W25Q128_Read_Status_Registers(hospi, &status_rgister, 1);
+	state = W25Q16_Read_Status_Registers(hospi, &status_rgister, 1);
 	if (state != HAL_OK)
 		return state;
 
@@ -793,7 +793,7 @@ HAL_StatusTypeDef W25Q128_IsBusy(OSPI_HandleTypeDef* hospi)
 }
 
 /* Read Status Registers Function */
-HAL_StatusTypeDef W25Q128_Read_Status_Registers(OSPI_HandleTypeDef* hospi, uint8_t* register_data, uint8_t register_num)
+HAL_StatusTypeDef W25Q16_Read_Status_Registers(OSPI_HandleTypeDef* hospi, uint8_t* register_data, uint8_t register_num)
 {
 	OSPI_RegularCmdTypeDef sCommand={0};
 
@@ -845,7 +845,7 @@ HAL_StatusTypeDef W25Q128_Read_Status_Registers(OSPI_HandleTypeDef* hospi, uint8
 }
 
 /* Write Status Registers Function */
-HAL_StatusTypeDef W25Q128_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint8_t reg_data, uint8_t reg_num)
+HAL_StatusTypeDef W25Q16_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint8_t reg_data, uint8_t reg_num)
 {
 	OSPI_RegularCmdTypeDef sCommand;
 
@@ -877,7 +877,7 @@ HAL_StatusTypeDef W25Q128_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint
 	if (HAL_OSPI_Command(hospi, &sCommand, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK) {
 		return HAL_ERROR;
 	}
-	if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
 
@@ -885,7 +885,7 @@ HAL_StatusTypeDef W25Q128_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint
 	if (HAL_OSPI_Command(hospi, &sCommand, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK) {
 		return HAL_ERROR;
 	}
-	if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
 
@@ -901,7 +901,7 @@ HAL_StatusTypeDef W25Q128_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint
 	sCommand.DataMode          		= HAL_OSPI_DATA_1_LINE;
 	sCommand.NbData            		= 1;
 
-	if (W25Q128_OSPI_WriteEnable(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_WriteEnable(hospi) != HAL_OK) {
 		return HAL_ERROR;
 	}
 
@@ -911,7 +911,7 @@ HAL_StatusTypeDef W25Q128_Write_Status_Registers(OSPI_HandleTypeDef* hospi, uint
 	if (HAL_OSPI_Transmit(hospi, &reg_data, HAL_OSPI_TIMEOUT_DEFAULT_VALUE) != HAL_OK) {
 		return HAL_ERROR;
 	}
-	if (W25Q128_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
+	if (W25Q16_OSPI_AutoPollingMemReady(hospi) != HAL_OK) {
         return HAL_ERROR;
     }
 
